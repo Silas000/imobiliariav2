@@ -3,7 +3,6 @@ session_start();
 include 'db.php';
 include 'csrf.php';
 
-// Verifica se há usuários cadastrados (para mostrar link de primeiro acesso)
 $stmt = $pdo->query("SELECT COUNT(*) FROM usuarios");
 $total_usuarios = $stmt->fetchColumn();
 
@@ -33,19 +32,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Login - Imobiliária</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body class="d-flex justify-content-center align-items-center vh-100">
-    <div class="card" style="width: 20rem;">
-        <div class="card-body">
-            <h5 class="card-title">Login do Administrador</h5>
+<?php $page_title = 'Login - Imobiliária'; include 'head.php'; ?>
+<body class="login-wrapper">
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Login do Administrador</h2>
+            <p>Acesse o painel de controle da imobiliária</p>
+        </div>
+        <div class="login-body">
             <form method="POST">
                 <?php echo csrfInput(); ?>
                 <div class="mb-3">
@@ -56,11 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="password" class="form-label">Senha</label>
                     <input type="password" class="form-control" name="password" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Entrar</button>
+                <button type="submit" class="btn login-btn">Entrar</button>
             </form>
             <?php if (isset($error)) echo "<div class='alert alert-danger mt-3'>" . htmlspecialchars($error) . "</div>"; ?>
             <?php if ($total_usuarios == 0): ?>
-                <div class="alert alert-info mt-3">
+                <div class="first-user-link">
                     <small>Nenhum usuário cadastrado. <a href="cadastrar_usuario.php">Criar primeiro administrador</a></small>
                 </div>
             <?php endif; ?>

@@ -1,11 +1,15 @@
 ﻿<?php
 session_start();
-if (!isset($_SESSION['admin'])) {
+include 'db.php';
+include 'csrf.php';
+
+$stmt = $pdo->query("SELECT COUNT(*) FROM usuarios");
+$total_usuarios = $stmt->fetchColumn();
+
+if (!isset($_SESSION['admin']) && $total_usuarios > 0) {
     header('Location: login.php');
     exit;
 }
-include 'db.php';
-include 'csrf.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
@@ -36,38 +40,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Usuário</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-</head>
+<?php $page_title = 'Editar Usuário'; include 'head.php'; ?>
 <body>
     <div class="container-fluid">
-        <div class="row">
+        <div class="row admin-layout">
             <?php include 'menu.php'; ?>
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-4">
-                <h1>Editar Usuário</h1>
-                <form method="POST">
-                    <?php echo csrfInput(); ?>
-                    <input type="hidden" name="id" value="<?php echo $usuario['id']; ?>">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Usuário</label>
-                        <input type="text" class="form-control" name="username" value="<?php echo htmlspecialchars($usuario['username']); ?>" required>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-4 main-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>Editar Usuário</h1>
+                    <a href="listar_usuarios.php" class="btn btn-outline-secondary btn-sm">Voltar</a>
+                </div>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <form method="POST">
+                            <?php echo csrfInput(); ?>
+                            <input type="hidden" name="id" value="<?php echo $usuario['id']; ?>">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Usuário</label>
+                                <input type="text" class="form-control" name="username" value="<?php echo htmlspecialchars($usuario['username']); ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Nova Senha</label>
+                                <input type="password" class="form-control" name="password" placeholder="Deixe em branco para manter a senha atual">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Atualizar</button>
+                        </form>
+                        <?php if (isset($success)) echo "<div class='alert alert-success mt-3'>" . htmlspecialchars($success) . "</div>"; ?>
+                        <?php if (isset($error)) echo "<div class='alert alert-danger mt-3'>" . htmlspecialchars($error) . "</div>"; ?>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Nova Senha</label>
-                        <input type="password" class="form-control" name="password" placeholder="Deixe em branco para manter a senha atual">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Atualizar</button>
-                </form>
-                <?php if (isset($success)) echo "<div class='alert alert-success mt-3'>" . htmlspecialchars($success) . "</div>"; ?>
-                <?php if (isset($error)) echo "<div class='alert alert-danger mt-3'>" . htmlspecialchars($error) . "</div>"; ?>
+                </div>
             </main>
         </div>
     </div>
+    <?php include 'footer.php'; ?>
 </body>
 </html>
