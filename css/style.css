@@ -1,0 +1,53 @@
+.sidebar {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding-top: 20px;
+    background-color: #f8f9fa; /* Cor de fundo do menu */
+}
+
+.sidebar h4 {
+    margin-bottom: 20px;
+    color: #343a40; /* Cor do texto do título */
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #495057; /* Cor do texto dos links */
+    transition: background-color 0.3s, color 0.3s; /* Transição suave */
+}
+
+.sidebar .nav-link:hover {
+    color: #fff; /* Cor do texto ao passar o mouse */
+    background-color: #007bff; /* Cor de fundo ao passar o mouse */
+}
+
+.sidebar .nav-link.active {
+    color: #fff; /* Cor do texto do link ativo */
+    background-color: #007bff; /* Cor de fundo do link ativo */
+}
+
+.sidebar .nav-item + .nav-item {
+    margin-top: 10px;
+}
+
+/* Footer */
+footer {
+    background-color: #343a40;
+    color: #fff;
+    padding: 15px 0;
+    margin-top: 30px;
+    border-top: 4px solid #007bff;
+}
+
+footer .container {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+footer .container p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}

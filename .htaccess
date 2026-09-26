@@ -1,0 +1,17 @@
+RewriteEngine On
+RewriteBase /
+
+# Remove .php da URL
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-zA-Z0-9_-]+)$ $1.php [L]
+
+# Bloquear acesso a arquivos sensíveis
+<Files "db.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+<Files "csrf.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
